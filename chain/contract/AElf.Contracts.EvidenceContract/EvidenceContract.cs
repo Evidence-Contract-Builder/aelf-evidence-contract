@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
+using AElf.Sdk.CSharp;
 using AElf.Types;
 using Google.Protobuf.WellKnownTypes;
 
@@ -13,36 +13,30 @@ namespace AElf.Contracts.EvidenceContract
 
             if (fileReceived == null)
             {
-                return null;
+                throw new AssertionException("File not found.");
             }
 
             var fileByte = fileReceived.FileByte;
-            Hash hashCode = Hash.FromByteArray(fileByte.ToByteArray());
+            var hashCode = HashHelper.ComputeFrom(fileByte.ToByteArray());
             //比较哈希码
-            if (hashCode == id)
-            {
-                return new BytesValue {Value = fileByte};
-            }
-
-            return null;
+            return hashCode == id ? new BytesValue {Value = fileByte} : null;
         }
 
         public override Empty FilesToHash(FileReceived input)
         {
             //fileReceived: id,fileName,fileBytes,fileSize,saveTime
             Hash id = input.Id;
-            var fileReveived = new FileReceived
+            var fileReceived = new FileReceived
             {
                 Id = id,
                 FileByte = input.FileByte,
                 FileName = input.FileName,
                 FileSize = input.FileSize,
-                SaveTime = Timestamp.FromDateTime(DateTime.Now)
+                SaveTime = Context.CurrentBlockTime
             };
-            State.FileReceived[id] = fileReveived;
+            State.FileReceived[id] = fileReceived;
 
             return new Empty();
         }
-
     }
 }
