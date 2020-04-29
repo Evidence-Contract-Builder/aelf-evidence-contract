@@ -18,7 +18,7 @@ namespace AElf.Blockchains.MainChain
 
             l.AddGenesisSmartContract(
                 _codes.Single(kv => kv.Key.Contains("Evidence")).Value,
-                Hash.FromString("AElf.ContractNames.EvidenceContract"),
+                HashHelper.ComputeFrom("AElf.ContractNames.EvidenceContract"),
                 GenerateEvidenceInitializationCallList());
 
             return l;
