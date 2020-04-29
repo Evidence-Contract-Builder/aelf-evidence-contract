@@ -3,6 +3,7 @@ using System.Linq;
 using Acs0;
 using AElf.Contracts.TestKit;
 using AElf.Cryptography.ECDSA;
+using AElf.EconomicSystem;
 using AElf.Kernel;
 using AElf.Types;
 using Google.Protobuf;

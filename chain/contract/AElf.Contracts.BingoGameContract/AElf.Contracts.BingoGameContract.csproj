@@ -2,8 +2,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
       <RootNamespace>AElf.Contracts.BingoGameContract</RootNamespace>
-      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <IsContract>true</IsContract>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <ContractCode Include="..\..\protobuf\bingo_game_contract.proto">

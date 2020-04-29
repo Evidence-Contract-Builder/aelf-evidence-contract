@@ -3,6 +3,8 @@ using System.Collections;
 using System.Linq;
 using AElf.Contracts.Consensus.AEDPoS;
 using AElf.Contracts.MultiToken;
+using AElf.CSharp.Core;
+using AElf.CSharp.Core.Extension;
 using AElf.Sdk.CSharp;
 using AElf.Types;
 
@@ -153,7 +155,7 @@ namespace AElf.Contracts.BingoGameContract
             Assert(boutInformation != null, "Bouts not found.");
             Assert(!boutInformation.IsComplete, "Bout already finished.");
 
-            var targetRound = State.ConsensusContract.GetRoundInformation.Call(new SInt64Value
+            var targetRound = State.ConsensusContract.GetRoundInformation.Call(new Int64Value
             {
                 Value = boutInformation.PlayRoundNumber.Add(1)
             });
@@ -162,7 +164,7 @@ namespace AElf.Contracts.BingoGameContract
             var randomHash = targetRound.RealTimeMinersInformation.Values.First(i => i.PreviousInValue != null).PreviousInValue;
             var isWin = ConvertHashToBool(randomHash);
 
-            var usefulHash = Hash.FromTwoHashes(randomHash, playerInformation.Seed);
+            var usefulHash = HashHelper.ConcatAndCompute(randomHash, playerInformation.Seed);
             var award = CalculateAward(boutInformation.Amount, GetKindFromHash(usefulHash));
             award = isWin ? award : -award;
 
